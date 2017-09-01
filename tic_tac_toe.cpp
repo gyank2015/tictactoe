@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 using namespace std;
 
 char pos[10] = {'o','1','2','3','4','5','6','7','8','9'};
@@ -8,35 +9,92 @@ void board();
 
 int main()
 {
-	int player = 1,i,choice;
-
-	char mark;
-	do
-	{
-		board();
-		player=(player%2)?1:2;
-
-		cout << "Player " << player << ", enter a number:  ";
-		cin >> choice;
-
-		mark=(player == 1) ? 'X' : 'O';
-
-		if((choice>=1&&choice<=9)&&pos[choice]==choice+48)
-			pos[choice]=mark;
+	int player = 1,choice,mode;
+	cout<<"Enter 1 for Player Vs computer.\nEnter 2 for Player vs Player.\n";
+	cin>>mode;
+	if(mode==2)
+	{	
+		char sign1;
+		char sign2;
+		cout<<"Player "<<player<<" choose a Sign('X' or 'O'): ";
+		cin>>sign1;
+		if(sign1=='X')
+			sign2='O';
 		else
-		{
-			cout<<"Invalid move ";
-
-			player--;
-			cin.ignore();
-			cin.get();
+			sign2='X';
+		cout<<endl;
+		while(checkwin()==-1)
+		{	
+			board();
+			player=(player%2)?1:2;
+			cout<<"Player "<<player<<" enter your choice: ";
+			cin>>choice;
+			if((choice>=1&&choice<=9)&&pos[choice]==choice+48)
+			{
+				if(player==1)
+					pos[choice]=sign1;
+				else
+					pos[choice]=sign2;
+			}
+			else
+			{	
+				cout<<"Invalid Move. \n";
+				player--;
+				cin.ignore();
+				cin.get();
+			}
+			player++;	
 		}
-		i=checkwin();
 
-		player++;
-	}while(i==-1);
+	}
+	if(mode==1)
+	{
+		char signp,signc;
+		cout<<"Player "<<player<<" choose a Sign('X' or 'O'): ";
+		cin>>signp;
+		if(signp=='X')
+			signc='O';
+		else
+			signc='X';
+		cout<<endl;
+		while(checkwin()==-1)
+		{
+			board();
+			player=(player%2)?1:2;
+			if(player==1)
+			{
+				cout<<"Player "<<player<<" enter your choice: ";
+				cin>>choice;
+				if((choice>=1&&choice<=9)&&pos[choice]==choice+48)
+					pos[choice]=signp;
+				else
+				{	
+					cout<<"Invalid Move. \n";
+					player--;
+					cin.ignore();
+					cin.get();
+				}
+				player++;
+			}
+			else
+			{
+				choice=rand()%10;
+				if(choice==0)
+					choice++;
+				while(pos[choice]!=choice+48)
+				{
+					choice=rand()%10;
+					if(choice==0)
+						choice++;
+				}
+				pos[choice]=signc;
+				player++;
+			}
+		}
+
+	}
 	board();
-	if(i==1)
+	if(checkwin()==1)
 
 		cout<<"==>\aPlayer "<<--player<<" win ";
 	else
