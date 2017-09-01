@@ -5,17 +5,17 @@ using namespace std;
 char pos[10] = {'o','1','2','3','4','5','6','7','8','9'};
 
 int checkwin();
-void board();
+void board(char sign1,char sign2);
 
 int main()
 {
 	int player = 1,choice,mode;
+	char sign1,sign2;
 	cout<<"Enter 1 for Player Vs computer.\nEnter 2 for Player vs Player.\n";
 	cin>>mode;
 	if(mode==2)
 	{	
-		char sign1;
-		char sign2;
+		
 		cout<<"Player "<<player<<" choose a Sign('X' or 'O'): ";
 		cin>>sign1;
 		if(sign1=='X')
@@ -25,7 +25,7 @@ int main()
 		cout<<endl;
 		while(checkwin()==-1)
 		{	
-			board();
+			board(sign1,sign2);
 			player=(player%2)?1:2;
 			cout<<"Player "<<player<<" enter your choice: ";
 			cin>>choice;
@@ -49,24 +49,23 @@ int main()
 	}
 	if(mode==1)
 	{
-		char signp,signc;
 		cout<<"Player "<<player<<" choose a Sign('X' or 'O'): ";
-		cin>>signp;
-		if(signp=='X')
-			signc='O';
+		cin>>sign1;
+		if(sign1=='X')
+			sign2='O';
 		else
-			signc='X';
+			sign2='X';
 		cout<<endl;
 		while(checkwin()==-1)
 		{
-			board();
+			board(sign1,sign2);
 			player=(player%2)?1:2;
 			if(player==1)
 			{
 				cout<<"Player "<<player<<" enter your choice: ";
 				cin>>choice;
 				if((choice>=1&&choice<=9)&&pos[choice]==choice+48)
-					pos[choice]=signp;
+					pos[choice]=sign1;
 				else
 				{	
 					cout<<"Invalid Move. \n";
@@ -87,13 +86,13 @@ int main()
 					if(choice==0)
 						choice++;
 				}
-				pos[choice]=signc;
+				pos[choice]=sign2;
 				player++;
 			}
 		}
 
 	}
-	board();
+	board(sign1,sign2);
 	if(checkwin()==1)
 
 		cout<<"==>\aPlayer "<<--player<<" win ";
@@ -142,12 +141,12 @@ int checkwin()
 }
 
 
-void board()
+void board(char sign1,char sign2)
 {
 	system("cls");
 	cout << "\n\n\tTic Tac Toe\n\n";
 
-	cout << "Player 1 (X)  -  Player 2 (O)" << endl << endl;
+	cout << "Player 1 ("<<sign1<<")  -  Player 2 ("<<sign2<<")" << endl << endl;
 	cout << endl;
 
 	cout << "     |     |     " << endl;
